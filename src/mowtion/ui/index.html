@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>mowtion</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23D7043B' width='32' height='32' rx='8'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="mark">
+        <div class="bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+        <h1>mowtion</h1>
+      </div>
+      <p class="quiet">A video from a voice, on your computer.</p>
+    </header>
+    <div class="layout">
+      <section class="card">
+        <div class="modes">
+          <button type="button" id="mode-script" class="active">Type a script</button>
+          <button type="button" id="mode-file">Drop a clip</button>
+        </div>
+        <textarea id="script">Drop in a voice note, or just type the words.
+
+Mowtion turns them into moving pictures while you speak.
+
+Bars and rings explain the idea, right on the beat.
+
+The music stays under your voice, and dips before the line that matters.
+
+Export a finished video from your own computer.</textarea>
+        <div class="drop" id="drop">
+          <div>
+            <div>Drop a voice note or a video here</div>
+            <div class="file-name" id="file-name"></div>
+            <div style="margin-top:10px"><button type="button" id="browse">Browse</button></div>
+            <input id="file" type="file" accept="audio/*,video/*" hidden />
+          </div>
+        </div>
+
+        <label class="field">Style</label>
+        <div class="presets" id="presets"></div>
+
+        <label class="field">Shape</label>
+        <div class="aspects">
+          <button type="button" data-aspect="9:16" class="active">Vertical 9:16</button>
+          <button type="button" data-aspect="16:9">Widescreen 16:9</button>
+        </div>
+
+        <details>
+          <summary>Posting pack (title, description, tags, cover)</summary>
+          <div class="seo-grid">
+            <input id="title" placeholder="Title" />
+            <textarea id="description" rows="3" placeholder="Description"></textarea>
+            <input id="tags" placeholder="Tags, separated by commas" />
+          </div>
+        </details>
+
+        <button class="go" id="go" type="button">Make video</button>
+        <div id="health"></div>
+        <div class="bar" id="bar" hidden><div></div></div>
+        <p id="status"></p>
+        <div id="result" hidden>
+          <video id="player" controls playsinline></video>
+          <div class="links" id="links"></div>
+          <pre id="seo-out" class="note" hidden></pre>
+        </div>
+      </section>
+      <aside class="card side">
+        <h2>What happens</h2>
+        <ol>
+          <li><b>Your words.</b> Type them, or drop a clip you already recorded.</li>
+          <li><b>A voice, if you need one.</b> Typed scripts are spoken with a free built-in voice.</li>
+          <li><b>Pictures and music.</b> Cards, charts, and type move with the beat. The score ducks under the voice.</li>
+          <li><b>A file you can post.</b> Vertical or widescreen, with an optional title, description, and cover.</li>
+        </ol>
+        <p class="quiet">Nothing is uploaded. The video is made on this computer. The first run downloads the voice and transcription models.</p>
+      </aside>
+    </div>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+:root {
+  --bg: #f7f6f2;
+  --paper: #ffffff;
+  --ink: #121713;
+  --muted: #5c645e;
+  --line: #e4e3dd;
+  --accent: #d7043b;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: Inter, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+}
+a { color: inherit; }
+.top, main, footer {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 22px;
+}
+.top, footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--muted);
+}
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-size: 20px; }
+.bars { display: flex; align-items: flex-end; gap: 3px; height: 18px; }
+.bars i { display: block; width: 3px; background: var(--accent); border-radius: 3px; }
+.bars i:nth-child(1) { height: 7px; }
+.bars i:nth-child(2) { height: 13px; }
+.bars i:nth-child(3) { height: 18px; }
+.bars i:nth-child(4) { height: 10px; }
+.bars i:nth-child(5) { height: 15px; }
+.hero { padding-top: 12px; }
+.eyebrow { letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px; color: var(--muted); }
+h1 {
+  font-size: clamp(40px, 6vw, 68px);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  margin: 8px 0 12px;
+  font-weight: 620;
+}
+.lede { font-size: 20px; max-width: 38rem; color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-weight: 650;
+}
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.fine { color: var(--muted); font-size: 14px; }
+.preview img {
+  width: 100%;
+  border-radius: 20px;
+  display: block;
+  background: #07090c;
+}
+h2 { font-size: 28px; letter-spacing: -0.03em; margin-bottom: 8px; }
+.features { list-style: none; padding: 0; display: grid; gap: 12px; }
+.features li, .steps li {
+  background: var(--paper);
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+.steps ol { padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: step; }
+.steps li { counter-increment: step; }
+.steps li::before {
+  content: counter(step);
+  display: inline-block;
+  width: 1.6em;
+  color: var(--accent);
+  font-weight: 700;
+}
+footer { border-top: 1px solid var(--line); margin-top: 12px; }
+@media (max-width: 640px) {
+  .lede { font-size: 18px; }
+}
