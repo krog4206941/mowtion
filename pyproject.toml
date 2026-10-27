@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mowtion"
+version = "0.1.0"
+description = "Turn a voice or a script into a finished motion-graphics video."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "mowtion contributors" }]
+keywords = ["video", "motion-graphics", "tts", "whisper"]
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "soundfile>=0.12",
+  "pillow>=10",
+  "faster-whisper>=1.0.0",
+  "kokoro-onnx>=0.4.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/krog4206941/mowtion"
+
+[project.scripts]
+mowtion = "mowtion.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+mowtion = ["ui/*", "assets/fonts/*"]
