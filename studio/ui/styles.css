@@ -1,0 +1,221 @@
+:root {
+  color-scheme: light;
+  --ink: #17211c;
+  --muted: #4d5b55;
+  --line: #d5ddd8;
+  --paper: #f4f6f3;
+  --card: #ffffff;
+  --cyan: #0b7280;
+  --cyan-soft: #e5f6f7;
+  --danger: #8d1d2c;
+  --danger-bg: #fdecef;
+  --ok: #0f6b45;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 18px/1.45 "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+main {
+  width: min(880px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 64px;
+}
+
+header { margin-bottom: 20px; }
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--cyan);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: 42px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.lead { margin: 8px 0 0; color: var(--muted); font-size: 20px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px 22px 22px;
+  margin: 14px 0;
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+
+h2 span {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: #111;
+  color: white;
+  font-size: 16px;
+}
+
+h2 em { color: var(--muted); font-style: normal; font-weight: 500; font-size: 18px; }
+
+p { margin: 0 0 12px; }
+
+label { display: block; font-size: 15px; font-weight: 650; color: var(--muted); }
+
+input, textarea, button {
+  font: inherit;
+  color: var(--ink);
+}
+
+input[type="url"], input[type="text"], input:not([type]), textarea {
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: white;
+}
+
+textarea { resize: vertical; }
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  background: #111;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:disabled { opacity: 0.55; cursor: wait; }
+
+button.big { margin-top: 12px; padding: 14px 18px; font-size: 20px; }
+
+button.quiet {
+  background: white;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.row { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
+
+.row .grow, .row input[type="url"] { flex: 1 1 280px; }
+
+.or { color: var(--muted); margin: 14px 0; }
+
+.times label { flex: 1; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.grid .wide { grid-column: 1 / -1; }
+
+fieldset {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin: 14px 0;
+  padding: 10px 14px;
+}
+
+legend { padding: 0 6px; color: var(--muted); font-size: 15px; font-weight: 700; }
+
+.choice { display: flex; gap: 8px; align-items: center; font-size: 18px; font-weight: 600; color: var(--ink); margin: 6px 0; }
+
+.choice input { width: auto; margin: 0; }
+
+.ideas { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+
+.idea {
+  text-align: left;
+  background: var(--cyan-soft);
+  color: var(--ink);
+  border: 1px solid #b7e3e6;
+}
+
+.idea small { display: block; color: var(--muted); font-weight: 500; }
+
+.transcript {
+  max-height: 280px;
+  overflow: auto;
+  padding: 12px;
+  background: #111;
+  color: #f4f7f5;
+  border-radius: 12px;
+  font: 15px/1.45 "Cascadia Mono", "Consolas", monospace;
+  white-space: pre-wrap;
+}
+
+.note { background: #fff8e8; border-radius: 10px; padding: 10px 12px; }
+
+.status {
+  min-height: 1.4em;
+  font-weight: 650;
+}
+
+.status.error { color: var(--danger); background: var(--danger-bg); padding: 10px 12px; border-radius: 10px; }
+
+.health { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 14px; }
+
+.pill {
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: #eef2ef;
+  font-size: 14px;
+}
+
+.pill.bad { background: var(--danger-bg); color: var(--danger); }
+
+.pill.good { background: #e7f6ee; color: var(--ok); }
+
+.fine { color: var(--muted); font-size: 15px; }
+
+.prompt {
+  border-top: 1px solid var(--line);
+  padding: 12px 0;
+}
+
+.prompt h3 { margin: 0 0 6px; font-size: 18px; }
+
+.prompt pre {
+  white-space: pre-wrap;
+  background: #f7f8f7;
+  border-radius: 10px;
+  padding: 10px;
+  max-height: 180px;
+  overflow: auto;
+  font-size: 14px;
+}
+
+video, audio { width: 100%; margin-top: 12px; }
+
+.result a {
+  display: inline-block;
+  margin: 8px 12px 0 0;
+  font-weight: 700;
+  color: var(--cyan);
+}
+
+@media (max-width: 700px) {
+  .grid { grid-template-columns: 1fr; }
+  h1 { font-size: 34px; }
+}

@@ -53,6 +53,19 @@ time you render. They are not part of the source tarball.
 | --- | --- | --- |
 | [FFmpeg](https://ffmpeg.org/) | LGPL-2.1 or GPL, depending on the build you install | Used to decode input, master loudness, and encode H.264 + AAC. mowtion does not ship an ffmpeg binary. Install an LGPL build if you want to avoid GPL. |
 
+## Clip Studio (`studio/`)
+
+Clip Studio is the one-click Windows app in this repo. It uses the same fonts and the same kind of Python drawing as mowtion. Extra pieces:
+
+| Project | License | What it does here |
+| --- | --- | --- |
+| [yt-dlp](https://github.com/yt-dlp/yt-dlp) | Unlicense | Downloads a public YouTube or X video |
+| [Flask](https://flask.palletsprojects.com/) | BSD-3-Clause | The local page in the browser |
+| [F5-TTS](https://github.com/SWivid/F5-TTS) | MIT | Optional Grandfather Joe voice. Not required. |
+| PyTorch (only if Joe's voice is installed) | BSD-3-Clause | Runs F5-TTS on the CPU |
+
+The Windows installer downloads an FFmpeg build that includes x264 (GPL). It is stored in `studio/tools/` on that PC and is not committed here. Kokoro and Whisper weights download on first use into `studio/models/` and are not committed. The Grandfather Joe reference clip in `studio/assets/voice/` is a short recording supplied for this app.
+
 ## Explicitly not used
 
 Remotion is not a dependency. Its license is not free for every use, so the

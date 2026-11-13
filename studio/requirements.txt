@@ -1,0 +1,8 @@
+numpy>=1.26
+scipy>=1.11
+soundfile>=0.12
+pillow>=10
+faster-whisper>=1.0.3
+kokoro-onnx>=0.4.7
+yt-dlp>=2024.10.7
+flask>=3.0
