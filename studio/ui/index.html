@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clip Studio</title>
+  <link rel="stylesheet" href="/styles.css?v=1">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">On this computer only</p>
+      <h1>Clip Studio</h1>
+      <p class="lead">Make a short video here. It is free. You do not need an account. Nothing is uploaded.</p>
+    </header>
+
+    <section class="card" id="step-get">
+      <h2><span>1</span> Get the footage</h2>
+      <p>Paste a YouTube link, or a public X link. Then press the button.</p>
+      <form id="url-form" class="row">
+        <label class="grow" for="url">Link</label>
+        <input id="url" name="url" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off">
+        <button type="submit" id="get-video">Get the video</button>
+      </form>
+      <p class="or">or choose a file from this computer</p>
+      <form id="file-form" class="row">
+        <input id="file" type="file" accept="video/*,audio/*,.mp4,.mov,.webm,.mkv,.mp3,.wav,.m4a">
+        <button type="submit" id="use-file">Use this file</button>
+      </form>
+    </section>
+
+    <section class="card" id="step-words">
+      <h2><span>2</span> Pick the moment</h2>
+      <p>The words show up with times. Click a suggestion, or type a start and an end. About 90 to 120 seconds is a good length.</p>
+      <div id="ideas" class="ideas"></div>
+      <pre id="transcript" class="transcript">No words yet. Get a video first.</pre>
+      <div class="row times">
+        <label>Start <input id="start" placeholder="1:30"></label>
+        <label>End <input id="end" placeholder="3:00"></label>
+      </div>
+    </section>
+
+    <section class="card" id="step-make">
+      <h2><span>3</span> Make the video</h2>
+      <p>Titles show in big capital letters. Side notes are optional. One note per line.</p>
+      <div class="grid">
+        <label>Hook line 1 <input id="hook1" placeholder="Watch this."></label>
+        <label>Hook line 2 <input id="hook2" placeholder="In their own words."></label>
+        <label class="wide">Headline <input id="headline" placeholder="The big idea"></label>
+        <label class="wide">Small line under the title <input id="subtitle" placeholder="One short sentence."></label>
+        <label>Source name <input id="source" placeholder="Channel or event"></label>
+        <label>Date <input id="date" placeholder="16 MAY 2014"></label>
+        <label>Last screen, line 1 <input id="end1" placeholder="That is the point."></label>
+        <label>Last screen, line 2 <input id="end2" placeholder="Full source in the post."></label>
+        <label class="wide">Side notes, one per line
+          <textarea id="accents" rows="4" placeholder="Slept in the office&#10;Showered at the YMCA&#10;100 hours vs 50 hours"></textarea>
+        </label>
+      </div>
+      <fieldset>
+        <legend>Sound</legend>
+        <label class="choice"><input type="radio" name="music" value="off" checked> No music (voice only)</label>
+        <label class="choice"><input type="radio" name="music" value="on"> Quiet music under the voice</label>
+      </fieldset>
+      <label class="choice"><input type="checkbox" id="vertical"> Also make a tall phone video (1080 by 1920)</label>
+      <label class="choice"><input type="checkbox" id="use-voice"> Use the voice I made in step 4, instead of the clip's sound</label>
+      <button type="button" id="make" class="big">Make the video</button>
+      <div id="results"></div>
+    </section>
+
+    <section class="card" id="step-voice">
+      <h2><span>4</span> Make a voice <em>(optional)</em></h2>
+      <p>Type words to speak. The fast voice is always there. Grandfather Joe is the cloned voice. If Joe is not installed, use the fast voice.</p>
+      <textarea id="script" rows="5" placeholder="Type a few sentences."></textarea>
+      <fieldset>
+        <legend>Which voice</legend>
+        <label class="choice"><input type="radio" name="engine" value="male" checked> Fast male voice</label>
+        <label class="choice"><input type="radio" name="engine" value="female"> Fast female voice</label>
+        <label class="choice"><input type="radio" name="engine" value="joe" id="joe-choice"> Grandfather Joe</label>
+      </fieldset>
+      <p id="joe-note" class="note" hidden>Joe's voice is not installed. The fast voice still works. You can double-click install.bat again if you want to retry Joe.</p>
+      <button type="button" id="speak">Make the voice</button>
+      <div id="voice-box"></div>
+    </section>
+
+    <section class="card" id="step-prompts">
+      <h2><span>5</span> Copy a prompt</h2>
+      <p>Copy one. Paste it into free Grok or ChatGPT. The words from step 2 are added for you.</p>
+      <div id="prompts"></div>
+    </section>
+
+    <section class="card status-card">
+      <h2>Status</h2>
+      <p id="status" class="status">Ready.</p>
+      <div id="health" class="health"></div>
+      <button type="button" id="update-dl" class="quiet">Update the downloader</button>
+      <p class="fine">If an X link fails, the post has to be public. Then press Update the downloader, close the black window, and double-click start.bat.</p>
+    </section>
+  </main>
+  <script src="/app.js?v=1"></script>
+</body>
+</html>
