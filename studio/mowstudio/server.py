@@ -396,6 +396,9 @@ def media(pid: str, name: str):
         "voice.wav",
         "output.mp4",
         "output_vertical.mp4",
+        "mow.mp4",
+        "cover.jpg",
+        "upload.txt",
     }
     if name not in allowed:
         abort(404)
@@ -432,6 +435,117 @@ def import_file():
 
     def work(job):
         return _import_saved(job, pid, folder, dest, title)
+
+    job_id = _launch(work)
+    if job_id is None:
+        return jsonify({"error": "The app is busy. Wait for the current step to finish."}), 409
+    return jsonify({"job": job_id})
+
+
+def _make_mow(job: dict, folder, pid: str, script: str, length: str, voice: str, music: bool, title: str, voice_path: Path | None, footage_path: Path | None) -> dict:
+    from mowstudio.mow import build_film, draw_cover, parse_script, render_mow, write_upload
+    from mowstudio.voice import speak_joe, speak_kokoro_lines
+
+    save(folder, {"id": pid, "title": title or "Mind Over World", "words": [], "source_name": "", "duration": 0, "has_video": bool(footage_path), "mode": "mow"})
+    rows = parse_script(script)
+    lines = [row[0] for row in rows]
+    if not lines and voice_path is None:
+        raise ValueError("Paste a script, or choose a recording you already made.")
+    dest = folder / "voice.wav"
+    line_times = None
+    note = ""
+    used = voice
+
+    def speak_progress(frac: float, message: str) -> None:
+        _poke(job, 0.05 + 0.35 * frac, message)
+
+    if voice == "file":
+        if voice_path is None:
+            raise ValueError("Choose your recording, or pick Grandfather Joe or the fast voice.")
+        dest = voice_path
+        used = "file"
+    elif voice == "joe" and lines:
+        try:
+            _poke(job, 0.08, "Speaking in Joe's voice...")
+            speak_joe(" ".join(lines), dest, speak_progress)
+            used = "joe"
+        except Exception:
+            _poke(job, 0.12, "Joe's voice is not installed. Using the fast voice.")
+            line_times = speak_kokoro_lines(lines, dest, voice="narrator", progress=speak_progress)
+            used = "kokoro"
+            note = "Joe's voice is not installed. The fast voice was used."
+    elif lines:
+        line_times = speak_kokoro_lines(lines, dest, voice="narrator", progress=speak_progress)
+        used = "kokoro"
+    _poke(job, 0.42, "Reading the words so the captions match...")
+    heard = transcribe(dest, folder / "asr", lambda frac, message: _poke(job, 0.42 + 0.15 * frac, message))
+    aspect = "9:16" if length != "long" else "16:9"
+    film = build_film(script or "", heard, line_times, aspect, title, music)
+    if not film.beats:
+        raise ValueError("There were no words to put on screen.")
+    out = folder / "mow.mp4"
+
+    def draw_progress(frac: float, message: str) -> None:
+        _poke(job, 0.58 + 0.36 * frac, message)
+
+    report = render_mow(film, dest, out, folder / "build-mow", footage_path if footage_path and footage_path.is_file() else None, draw_progress)
+    cover = draw_cover(film.title, aspect)
+    cover.save(folder / "cover.jpg", quality=92)
+    write_upload(folder / "upload.txt", film.title, script, aspect, film.beats)
+    meta = load(folder)
+    meta["voice"] = dest.name
+    meta["voice_engine"] = used
+    meta["voice_words"] = heard
+    meta["duration"] = report.get("duration") or 0
+    meta["title"] = film.title
+    save(folder, meta)
+    message = "Your Mind Over World video is ready."
+    if note:
+        message = note + " " + message
+    return {
+        "id": pid,
+        "mode": "mow",
+        "video": "mow.mp4",
+        "cover": "cover.jpg",
+        "upload": "upload.txt",
+        "voice_engine": used,
+        "message": message,
+        "duration": report.get("duration"),
+        "lufs": report.get("lufs"),
+        "true_peak": report.get("true_peak"),
+        "bytes": report.get("bytes"),
+        "width": report.get("width"),
+        "height": report.get("height"),
+    }
+
+
+@app.post("/api/mow")
+def mow_route():
+    if BUSY.locked():
+        return jsonify({"error": "The app is busy. Wait for the current step to finish."}), 409
+    script = request.form.get("script") or ""
+    length = request.form.get("length") or "short"
+    voice = request.form.get("voice") or "joe"
+    music = (request.form.get("music") or "on").strip().lower() != "off"
+    title = request.form.get("title") or ""
+    pid, folder = create()
+    voice_path = None
+    footage_path = None
+    voice_file = request.files.get("voice_file")
+    if voice_file is not None and voice_file.filename:
+        ext = Path(voice_file.filename).suffix.lower()
+        if ext not in ALLOWED_UPLOAD:
+            ext = ".wav"
+        voice_path = folder / f"voice_in{ext}"
+        voice_file.save(voice_path)
+    footage = request.files.get("footage")
+    if footage is not None and footage.filename:
+        ext = Path(footage.filename).suffix.lower() or ".mp4"
+        footage_path = folder / f"footage{ext}"
+        footage.save(footage_path)
+
+    def work(job):
+        return _make_mow(job, folder, pid, script, length, voice, music, title, voice_path, footage_path)
 
     job_id = _launch(work)
     if job_id is None:

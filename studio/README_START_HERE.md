@@ -42,7 +42,25 @@ If the browser does not open, look at the black window for a line like `http://1
 
 The picture is 1920 by 1080, on a pure black background. Check **Also make a tall phone video** if you want 1080 by 1920 too.
 
-## 5. Optional voice
+## 5. Make a Mind Over World video
+
+This is for the YouTube channel. The picture is black. The words are on the screen. There is no face.
+
+1. Open Clip Studio.
+2. Press **Mind Over World** at the top.
+3. Paste the script. Put one line for each picture. You can add the words to show after a `|`, like `I waited twenty minutes. | 20 minutes`.
+4. Type 2 to 4 words for the cover.
+5. Pick **Short** for a phone video, or **Long video** for a wide one.
+6. Leave the voice on **Grandfather Joe**. If Joe is not installed, the app uses the fast voice and tells you.
+7. Leave the sound on **Quiet music**.
+8. Press **Make the video**.
+9. Press **Save the video**, **Save the cover**, and **Save the title and tags**.
+
+You can also choose a recording you already made, or add your own video so the words sit on top of it.
+
+The prompts for a Short, a long video, topic ideas, and the YouTube title are in the app under **Copy a prompt**. They are also in `PROMPTS.md`.
+
+## 6. Optional voice
 
 In step 4, type a few sentences and press **Make the voice**.
 
@@ -51,7 +69,7 @@ In step 4, type a few sentences and press **Make the voice**.
 
 To put that voice on the video, check **Use the voice I made** in step 3, then press **Make the video**.
 
-## 6. Prompts
+## 7. Prompts
 
 Step 5 in the app has Copy buttons. Paste the prompt into free Grok or ChatGPT.
 

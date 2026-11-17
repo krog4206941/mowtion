@@ -14,11 +14,11 @@ from mowstudio.media import ffmpeg, run
 from mowstudio.qc import inspect
 
 
-def _encode(visual: Path, audio: Path, out: Path, duration: float, work: Path) -> None:
-    """H.264 + AAC, fast start, under 15 MB. Two passes when the cap needs it."""
+def _encode(visual: Path, audio: Path, out: Path, duration: float, work: Path, max_bytes: int = 15_000_000) -> None:
+    """H.264 + AAC, fast start. Two passes when the file would pass ``max_bytes``."""
     out.parent.mkdir(parents=True, exist_ok=True)
     audio_bytes = audio.stat().st_size
-    budget = 14_200_000 - audio_bytes
+    budget = max(400_000, max_bytes - 300_000 - audio_bytes)
     kbps = max(400, int((budget * 8) / max(duration, 0.5) / 1000 * 0.88))
 
     def two_pass(rate: int, dest: Path) -> None:
@@ -79,11 +79,11 @@ def _encode(visual: Path, audio: Path, out: Path, duration: float, work: Path) -
         )
 
     two_pass(kbps, out)
-    if out.stat().st_size >= 15_000_000:
-        smaller = max(280, int(kbps * (14_000_000 / out.stat().st_size) * 0.9))
+    if out.stat().st_size >= max_bytes:
+        smaller = max(280, int(kbps * ((max_bytes * 0.92) / out.stat().st_size)))
         two_pass(smaller, out)
-    if out.stat().st_size >= 15_000_000:
-        raise RuntimeError("The video was still over 15 MB. Try a shorter clip.")
+    if out.stat().st_size >= max_bytes:
+        raise RuntimeError("The video was still too big. Try a shorter clip.")
 
 
 def render_mp4(

@@ -149,6 +149,57 @@ class PackTests(unittest.TestCase):
         self.assertNotIn("private", message.lower())
 
 
+class MindOverWorldTests(unittest.TestCase):
+    def test_script_beats_and_black_frame(self):
+        from mowstudio.mow import _Fonts, build_film, parse_script, render_frame
+
+        rows = parse_script(
+            "I had until nine, and I still could not sleep. | 9 AM\n"
+            "Can I do it? | Can I do it?\n"
+            "The perfect words did not help. — Marcus Aurelius\n"
+        )
+        self.assertEqual(rows[0][1], "9 AM")
+        self.assertEqual(len(rows), 3)
+        film = build_film(
+            "I had until nine, and I still could not sleep. | 9 AM\nCan I send it? | Can I?\n",
+            words=None,
+            line_times=[
+                {"text": "a", "start": 0.1, "end": 2.4},
+                {"text": "b", "start": 2.55, "end": 4.2},
+            ],
+            aspect="9:16",
+            title="Send it once",
+            music=True,
+        )
+        self.assertEqual(film.width, 1080)
+        self.assertEqual(film.height, 1920)
+        self.assertTrue(film.music)
+        self.assertEqual(film.beats[1].kind, "question")
+        frame = render_frame(film, 0.2, 6.0, _Fonts(), None)
+        self.assertEqual(frame.size, (1080, 1920))
+        self.assertEqual(frame.getpixel((0, 0)), (0, 0, 0))
+        bright = 0
+        step = 12
+        for y in range(0, frame.size[1], step):
+            for x in range(0, frame.size[0], step):
+                if frame.getpixel((x, y)) != (0, 0, 0):
+                    bright += 1
+        self.assertGreater(bright, 20)
+        end = render_frame(film, 7.5, 6.0, _Fonts(), None)
+        self.assertEqual(end.getpixel((0, 0)), (0, 0, 0))
+
+    def test_prompts_and_page_have_the_channel_mode(self):
+        text = (ROOT / "studio" / "PROMPTS.md").read_text(encoding="utf-8")
+        for phrase in ("Attention Trap", "Can they do it", "Head fake", "Rehook", "Let Them Be Wrong", "SpongeBob", "PINNED COMMENT", "6th-grade"):
+            self.assertIn(phrase, text)
+        html = (ROOT / "studio" / "ui" / "index.html").read_text(encoding="utf-8")
+        self.assertIn("Mind Over World", html)
+        self.assertIn('name="mow-music" value="on" checked', html)
+        self.assertIn('name="music" value="off" checked', html)
+        draw = (ROOT / "studio" / "mowstudio" / "draw.py").read_text(encoding="utf-8")
+        self.assertNotIn("MIND OVER WORLD", draw)
+
+
 @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg is required")
 class RenderSmokeTest(unittest.TestCase):
     def test_voice_only_mp4(self):

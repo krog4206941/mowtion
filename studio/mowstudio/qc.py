@@ -67,7 +67,7 @@ def corner_rgb(path: Path, t: float = 0.15) -> tuple[int, int, int]:
     return raw[0], raw[1], raw[2]
 
 
-def inspect(path: Path, width: int, height: int) -> dict:
+def inspect(path: Path, width: int, height: int, max_bytes: int = 15_000_000) -> dict:
     info = probe(path)
     video = next(item for item in info["streams"] if item["codec_type"] == "video")
     audio = next(item for item in info["streams"] if item["codec_type"] == "audio")
@@ -95,8 +95,8 @@ def inspect(path: Path, width: int, height: int) -> dict:
         report["issues"].append("Video is not H.264.")
     if report["audio_codec"] != "aac":
         report["issues"].append("Audio is not AAC.")
-    if size >= 15_000_000:
-        report["issues"].append(f"File is {size} bytes. It must be under 15 MB.")
+    if size >= max_bytes:
+        report["issues"].append(f"File is {size} bytes. It must be under {max_bytes} bytes.")
     if not report["faststart"]:
         report["issues"].append("The file is not set for fast start.")
     if abs(loud["lufs"] + 14) > 0.6:

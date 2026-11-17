@@ -271,6 +271,8 @@ async function loadHealth() {
     if (row.label === "Grandfather Joe") joeOk = row.ok;
   });
   document.getElementById("joe-note").hidden = joeOk;
+  const mowNote = document.getElementById("joe-note-mow");
+  if (mowNote) mowNote.hidden = joeOk;
 }
 
 document.getElementById("update-dl").addEventListener("click", async () => {
@@ -278,6 +280,70 @@ document.getElementById("update-dl").addEventListener("click", async () => {
     const result = await startJob("/api/update-ytdlp", { method: "POST" });
     setStatus(result.message || "Downloader updated.");
     loadHealth();
+  } catch (error) {
+    setStatus(error.message, true);
+  }
+});
+
+function setMode(mode) {
+  const mow = mode === "mow";
+  document.getElementById("mode-elon").classList.toggle("on", !mow);
+  document.getElementById("mode-mow").classList.toggle("on", mow);
+  document.querySelectorAll(".elon-only").forEach((el) => {
+    el.hidden = mow;
+  });
+  document.querySelectorAll(".mow-only").forEach((el) => {
+    el.hidden = !mow;
+  });
+  setStatus(mow ? "Mind Over World. Paste a script, then make the video." : "Elon clip. Paste a link, or choose a file.");
+}
+
+document.getElementById("mode-elon").addEventListener("click", () => setMode("elon"));
+document.getElementById("mode-mow").addEventListener("click", () => setMode("mow"));
+if (new URLSearchParams(location.search).get("mode") === "mow") setMode("mow");
+
+document.getElementById("mow-make").addEventListener("click", async () => {
+  const body = new FormData();
+  body.append("script", document.getElementById("mow-script").value);
+  body.append("title", document.getElementById("mow-title").value);
+  body.append("length", document.querySelector("input[name=mow-length]:checked").value);
+  body.append("voice", document.querySelector("input[name=mow-voice]:checked").value);
+  body.append("music", document.querySelector("input[name=mow-music]:checked").value);
+  const audio = document.getElementById("mow-audio").files[0];
+  const footage = document.getElementById("mow-footage").files[0];
+  if (audio) body.append("voice_file", audio);
+  if (footage) body.append("footage", footage);
+  try {
+    const result = await startJob("/api/mow", { method: "POST", body });
+    const box = document.getElementById("mow-results");
+    box.innerHTML = "";
+    const wrap = document.createElement("div");
+    wrap.className = "result";
+    const video = document.createElement("video");
+    video.controls = true;
+    video.src = "/api/media/" + result.id + "/" + result.video;
+    wrap.appendChild(video);
+    const saveVideo = document.createElement("a");
+    saveVideo.href = video.src;
+    saveVideo.download = "mind-over-world.mp4";
+    saveVideo.textContent = "Save the video";
+    const saveCover = document.createElement("a");
+    saveCover.href = "/api/media/" + result.id + "/cover.jpg";
+    saveCover.download = "cover.jpg";
+    saveCover.textContent = "Save the cover";
+    const saveText = document.createElement("a");
+    saveText.href = "/api/media/" + result.id + "/upload.txt";
+    saveText.download = "upload.txt";
+    saveText.textContent = "Save the title and tags";
+    wrap.append(saveVideo, saveCover, saveText);
+    const cover = document.createElement("img");
+    cover.alt = "Cover";
+    cover.src = saveCover.href;
+    cover.style.marginTop = "12px";
+    cover.style.maxWidth = "280px";
+    wrap.appendChild(cover);
+    box.appendChild(wrap);
+    setStatus(result.message || "Your video is ready.");
   } catch (error) {
     setStatus(error.message, true);
   }

@@ -86,6 +86,24 @@ def _sentences(text: str) -> list[str]:
     return [part.strip() for part in parts if part.strip()]
 
 
+def _kokoro_voice(engine, voice: str):
+    if voice == "narrator":
+        try:
+            return engine.get_voice_style("am_michael") * 0.5 + engine.get_voice_style("am_onyx") * 0.5
+        except Exception:
+            return "am_michael"
+    return KOKORO_VOICES.get(voice, KOKORO_VOICES["male"])
+
+
+def _trim_chunk(audio: np.ndarray, sr: int) -> np.ndarray:
+    loud = np.where(np.abs(audio) > 0.015)[0]
+    if len(loud) == 0:
+        return audio
+    start = max(0, int(loud[0]) - int(0.01 * sr))
+    end = min(len(audio), int(loud[-1]) + int(0.04 * sr))
+    return audio[start:end]
+
+
 def speak_kokoro(text: str, dest: Path, voice: str = "male", progress=None) -> Path:
     spoken = " ".join(text.split())
     if not spoken:
@@ -94,7 +112,7 @@ def speak_kokoro(text: str, dest: Path, voice: str = "male", progress=None) -> P
         progress(0.05, "Loading the fast voice...")
     ensure_kokoro(progress)
     engine = _kokoro()
-    name = KOKORO_VOICES.get(voice, KOKORO_VOICES["male"])
+    name = _kokoro_voice(engine, voice)
     chunks = []
     pieces = _sentences(spoken)
     for index, piece in enumerate(pieces):
@@ -114,6 +132,46 @@ def speak_kokoro(text: str, dest: Path, voice: str = "male", progress=None) -> P
     dest.parent.mkdir(parents=True, exist_ok=True)
     sf.write(str(dest), audio, sample_rate, subtype="PCM_16")
     return dest
+
+
+def speak_kokoro_lines(lines: list[str], dest: Path, voice: str = "narrator", gap: float = 0.14, progress=None) -> list[dict]:
+    """Speak each line with a short gap. Returns start and end times in seconds.
+
+    The gaps stay short so the video has no dead air.
+    """
+    clean = [" ".join(line.split()) for line in lines if line and line.strip()]
+    if not clean:
+        raise ValueError("Type the words you want spoken.")
+    if progress:
+        progress(0.05, "Loading the fast voice...")
+    ensure_kokoro(progress)
+    engine = _kokoro()
+    name = _kokoro_voice(engine, voice)
+    pieces: list[np.ndarray] = []
+    times: list[dict] = []
+    cursor = 0.05
+    sample_rate = 24000
+    pieces.append(np.zeros(int(cursor * sample_rate), dtype=np.float32))
+    for index, line in enumerate(clean):
+        if progress:
+            progress(0.1 + 0.8 * (index / max(1, len(clean))), "Speaking...")
+        audio, sr = engine.create(line, voice=name, speed=1.0, lang="en-us", trim=True)
+        audio = _trim_chunk(np.asarray(audio, dtype=np.float32), int(sr))
+        sample_rate = int(sr)
+        start = cursor
+        pieces.append(audio)
+        cursor += len(audio) / sample_rate
+        times.append({"text": line, "start": round(start, 3), "end": round(cursor, 3)})
+        pad = np.zeros(int(gap * sample_rate), dtype=np.float32)
+        pieces.append(pad)
+        cursor += gap
+    audio = np.concatenate(pieces)
+    peak = float(np.max(np.abs(audio))) if len(audio) else 0.0
+    if peak > 0:
+        audio = audio / peak * 0.8
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    sf.write(str(dest), audio, sample_rate, subtype="PCM_16")
+    return times
 
 
 def speak_joe(text: str, dest: Path, progress=None) -> Path:

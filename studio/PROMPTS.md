@@ -123,3 +123,85 @@ VISUALS:
 TITLE:
 DESCRIPTION:
 TAGS:
+
+## Mind Over World Short
+
+Write a YouTube Shorts script for the Mind Over World channel.
+
+Use the 4-step Attention Trap, in this order:
+1. Stakes in the first line. Someone to root for. Something to lose. A deadline. First person. Example: "I had until 9 a.m., and I still could not sleep."
+2. Big question. Can they do it? One question the viewer wants answered.
+3. Head fake. Twist the ending they expect. The obvious fix fails, or the fear was never the real problem.
+4. Rehook. Right after you answer one question, open a new loop. A new small question or a next step they need.
+
+Rules:
+- First-person emotional storytelling. Say "I", not "one should".
+- Simple everyday English. About a 6th-grade reading level.
+- ONE clear idea. Say the lesson in plain words at least once.
+- About 110 to 160 words so it speaks for 45 to 75 seconds.
+- Output ONE line per caption beat. After each line, add ` | ` and a suggested literal visual: the exact words, number, or name to put on screen. No metaphors. Example: `I checked it five times. | 5 times`
+- If you quote a Stoic, put the quote in the line and the name after ` | — Name`.
+- No swear words. No faces. No clever symbols.
+
+Topic:
+{{TRANSCRIPT}}
+
+Return only the lines. Then, on their own lines:
+TITLE: (under 70 characters)
+DESCRIPTION:
+TAGS:
+PINNED COMMENT:
+
+## Mind Over World long video
+
+Write a long YouTube script for the Mind Over World channel. Aim for 6 to 10 minutes when spoken.
+
+Use the same rules as a Mind Over World Short:
+- Attention Trap shape inside the video: stakes, big question, head fake, rehook.
+- First person. Simple everyday English. About a 6th-grade reading level.
+- ONE clear idea. State the lesson in plain words at least once.
+- Open a loop, pay it off, then open the next loop. Do not stack three lessons.
+- Chapters. Start each chapter with a line that begins with `# ` and a short chapter name.
+- Under each chapter, one spoken line per caption beat. After a line, add ` | ` and a literal visual (the exact words or number on screen). No metaphors.
+- Stoic quotes get the name after ` | — Name`.
+
+Topic:
+{{TRANSCRIPT}}
+
+Return:
+CHAPTERS AND LINES:
+TITLE:
+DESCRIPTION: (2 short paragraphs)
+TAGS:
+PINNED COMMENT:
+
+## Mind Over World topic ideas
+
+Give 12 topic ideas for the Mind Over World YouTube channel.
+
+Use Einzelgänger-style angles. Study these patterns, then write new ideas. Do not copy titles word for word.
+- Pop-culture philosophy. A known character or story, then the real idea. Examples of the angle, not titles to reuse: SpongeBob, Squidward, Shawshank.
+- "Why you…" pain titles. The viewer already feels the problem.
+- Contrarian advice. The usual tip is wrong, and you say why in plain words.
+- Short blunt commands. The shape of "Let Them Be Wrong".
+
+For each idea return:
+TITLE:
+ANGLE: (one of: pop culture, why you, contrarian, command)
+ONE-SENTENCE STORY:
+LESSON IN PLAIN WORDS:
+
+Keep the words simple. About a 6th-grade reading level. Stoic or practical self-improvement. No faces. One idea each.
+
+## Mind Over World SEO
+
+Write the YouTube upload text for a Mind Over World video.
+
+Script:
+{{TRANSCRIPT}}
+
+Return:
+TITLE: under 70 characters, clear, no fake promises. Add #shorts only if this is a Short.
+DESCRIPTION: 2 short paragraphs in plain words. End with "Mind Over World".
+TAGS: 10 tags, comma-separated. Include the problem people type into search, plus stoicism or the thinker's name if one is in the script.
+PINNED COMMENT: one short question the viewer can answer in one line.

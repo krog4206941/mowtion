@@ -189,6 +189,11 @@ legend { padding: 0 6px; color: var(--muted); font-size: 15px; font-weight: 700;
 
 .fine { color: var(--muted); font-size: 15px; }
 
+.modes { display: flex; gap: 8px; margin-top: 16px; }
+.modes button { background: white; color: var(--ink); border: 1px solid var(--line); }
+.modes button.on { background: #111; color: white; }
+.mow-only[hidden], .elon-only[hidden] { display: none !important; }
+
 .prompt {
   border-top: 1px solid var(--line);
   padding: 12px 0;
