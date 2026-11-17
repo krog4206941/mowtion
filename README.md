@@ -2,6 +2,10 @@
 
 Turn a voice, or a script, into a finished motion-graphics video. Free, open source, and MIT licensed. It runs on your computer.
 
+## Clip Studio (Windows, one click)
+
+To make a short clip from a YouTube or X link, with the black panel look, open [studio/README_START_HERE.md](studio/README_START_HERE.md). On Windows, double-click `studio/install.bat`, then `studio/start.bat`.
+
 ![Dark Techy still](examples/stills/dark-techy.png)
 
 ![Clean Light still](examples/stills/clean-light.png)

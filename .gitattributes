@@ -1,0 +1,2 @@
+studio/*.bat text eol=crlf
+studio/**/*.ps1 text eol=crlf

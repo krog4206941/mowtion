@@ -1,0 +1,2 @@
+# Optional. If this install fails, Clip Studio still runs with the fast voice.
+f5-tts
